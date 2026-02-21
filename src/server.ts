@@ -3,6 +3,7 @@ import express from "express";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { registerTools } from "./tools/index.js";
+import { createApiRouter } from "./api.js";
 
 const PORT = parseInt(process.env.SHEPHERD_PORT || "3848", 10);
 
@@ -17,6 +18,19 @@ function createServer(): McpServer {
 
 const app = express();
 app.use(express.json());
+
+// CORS for dashboard dev server
+app.use("/api", (_req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  if (_req.method === "OPTIONS") {
+    res.sendStatus(204);
+    return;
+  }
+  next();
+});
+app.use("/api", createApiRouter());
 
 // Map of session ID -> transport for stateful connections
 const transports = new Map<string, StreamableHTTPServerTransport>();
