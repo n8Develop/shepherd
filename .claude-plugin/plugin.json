@@ -1,0 +1,6 @@
+{
+  "name": "shepherd",
+  "description": "Orchestrate Claude Code CLI agent teams from Claude Desktop with visual verification. Desktop dispatches plans, monitors progress, and gates task completion via a verification queue.",
+  "version": "0.1.0",
+  "author": { "name": "n8Develop" }
+}

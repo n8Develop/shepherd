@@ -1,0 +1,24 @@
+# Claude Code
+.claude/settings.local.json
+
+# Environment
+.env
+.env.*
+
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(node *)",
+      "Bash(git *)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(curl *)",
+      "Bash(claude *)",
+      "Bash(jq *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean -f*)",
+      "Read(/**/.env)",
+      "Read(/**/.env.*)",
+      "Read(/**/credentials*)",
+      "Read(/**/*secret*)"
+    ]
+  }
+}
