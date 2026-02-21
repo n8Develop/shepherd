@@ -1,8 +1,14 @@
+import { randomUUID } from "node:crypto";
 import { z } from "zod/v4";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { dispatchPlan } from "./dispatch-plan.js";
 import { getSession } from "../queue/sessions.js";
-import { listVerifications } from "../queue/verification.js";
+import {
+  listVerifications,
+  getVerification,
+  updateVerification,
+} from "../queue/verification.js";
+import { createFeedback } from "../queue/feedback.js";
 import { readTeamStatus } from "../cli/teams.js";
 import { getActiveProcess } from "../cli/spawn.js";
 
@@ -129,6 +135,101 @@ export function registerTools(server: McpServer): void {
               null,
               2
             ),
+          },
+        ],
+      };
+    }
+  );
+
+  server.registerTool(
+    "submit-verification",
+    {
+      title: "Submit Verification",
+      description:
+        "Approve or reject a visual verification request. Updates the request status so the teammate's TaskCompleted hook can proceed.",
+      inputSchema: z.object({
+        verificationId: z
+          .string()
+          .describe("The verification request ID to resolve"),
+        status: z
+          .enum(["approved", "rejected"])
+          .describe("Whether the visual check passed or failed"),
+        resolution: z
+          .string()
+          .describe("Brief explanation of the verification result"),
+        feedback: z
+          .string()
+          .optional()
+          .describe(
+            "Detailed feedback for the teammate (only needed for rejections)"
+          ),
+      }),
+    },
+    async ({ verificationId, status, resolution, feedback }) => {
+      const existing = await getVerification(verificationId);
+      if (!existing) {
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: JSON.stringify({
+                error: `Verification ${verificationId} not found`,
+              }),
+            },
+          ],
+        };
+      }
+
+      const updated = await updateVerification(verificationId, {
+        status,
+        resolution,
+        feedback: feedback ?? null,
+      });
+
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify(updated, null, 2),
+          },
+        ],
+      };
+    }
+  );
+
+  server.registerTool(
+    "send-feedback",
+    {
+      title: "Send Feedback",
+      description:
+        "Send feedback or corrections from Desktop to a CLI teammate. The teammate's TeammateIdle hook will pick this up.",
+      inputSchema: z.object({
+        verificationId: z
+          .string()
+          .describe("The verification request this feedback relates to"),
+        sessionId: z
+          .string()
+          .describe("The session ID of the agent team"),
+        content: z
+          .string()
+          .describe(
+            "The feedback content — corrections, notes, or instructions for the teammate"
+          ),
+      }),
+    },
+    async ({ verificationId, sessionId, content }) => {
+      const entry = await createFeedback({
+        id: randomUUID(),
+        sessionId,
+        verificationId,
+        content,
+      });
+
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify(entry, null, 2),
           },
         ],
       };

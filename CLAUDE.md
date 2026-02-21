@@ -2,7 +2,7 @@
 
 ## Current Priority
 
-**v0.1 MVP complete.** Phases 0–7 done. Next milestone: v0.2 feedback loop (Phase 8).
+**v0.2 complete.** Phases 0–8 done. Full bidirectional loop: Desktop dispatches, verifies, and sends feedback.
 
 ## Project Overview
 
@@ -35,7 +35,7 @@ Claude Code CLI Lead → Agent Team Teammates
 src/
 ├── server.ts              # Express + MCP server entry point
 ├── tools/                 # MCP tool implementations
-│   ├── index.ts           # Tool registration (get-team-status, get-verification-queue inline)
+│   ├── index.ts           # Tool registration (5 tools: dispatch-plan, get-team-status, get-verification-queue, submit-verification, send-feedback)
 │   └── dispatch-plan.ts   # Spawn CLI agent team
 ├── queue/                 # Filesystem CRUD layer
 │   ├── verification.ts
@@ -91,8 +91,14 @@ claude plugin validate .
 - [x] TaskCompleted hook (Phase 6) — blocks completion on pending verifications, fails open without jq
 - [x] Integration + README (Phase 7) — .mcp.json, README with install/setup/usage docs
 
+### Completed (v0.2 Feedback Loop)
+- [x] submit-verification tool (Phase 8) — Desktop approves/rejects verifications via MCP
+- [x] send-feedback tool (Phase 8) — Desktop sends corrections to CLI teammates
+- [x] TeammateIdle hook (Phase 8) — relays feedback from Desktop when teammate goes idle
+
 ### Next
-- [ ] Feedback loop — v0.2 (Phase 8)
+- [ ] End-to-end test of full bidirectional loop
+- [ ] MCP resources (live task list) — deferred
 
 ## Compaction Policy
 
