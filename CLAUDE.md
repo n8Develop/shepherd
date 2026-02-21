@@ -17,7 +17,7 @@ Claude Code plugin + MCP server that enables Claude Desktop to orchestrate CLI a
 
 ```
 Claude Desktop (human + vision) → initiates, verifies
-  ↓ MCP (HTTP, localhost:3847)
+  ↓ MCP (HTTP, localhost:3848)
 Shepherd MCP Server (Node.js) → dispatches, reads state, manages queue
   ↓ child_process.spawn
 Claude Code CLI Lead → Agent Team Teammates

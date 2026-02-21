@@ -54,7 +54,7 @@ Add the Shepherd MCP server to Claude Desktop's config (`claude_desktop_config.j
   "mcpServers": {
     "shepherd": {
       "type": "http",
-      "url": "http://localhost:3847/mcp"
+      "url": "http://localhost:3848/mcp"
     }
   }
 }

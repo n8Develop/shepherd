@@ -4,14 +4,16 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { registerTools } from "./tools/index.js";
 
-const PORT = parseInt(process.env.SHEPHERD_PORT || "3847", 10);
+const PORT = parseInt(process.env.SHEPHERD_PORT || "3848", 10);
 
-const server = new McpServer({
-  name: "shepherd",
-  version: "0.1.0",
-});
-
-registerTools(server);
+function createServer(): McpServer {
+  const server = new McpServer({
+    name: "shepherd",
+    version: "0.1.0",
+  });
+  registerTools(server);
+  return server;
+}
 
 const app = express();
 app.use(express.json());
@@ -29,7 +31,7 @@ app.post("/mcp", async (req, res) => {
     return;
   }
 
-  // New session — create transport
+  // New session — create transport and server instance
   const transport = new StreamableHTTPServerTransport({
     sessionIdGenerator: () => randomUUID(),
   });
@@ -39,6 +41,7 @@ app.post("/mcp", async (req, res) => {
     if (sid) transports.delete(sid);
   };
 
+  const server = createServer();
   await server.connect(transport);
   await transport.handleRequest(req, res, req.body);
 
