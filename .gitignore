@@ -2,8 +2,8 @@
 .claude/settings.local.json
 .claude/launch.json
 
-# Runtime results (regenerated per session)
-tasks/*-result.md
+# Runtime — project workspaces are ephemeral
+projects/*/
 
 # Environment
 .env
