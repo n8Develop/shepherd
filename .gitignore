@@ -2,22 +2,12 @@
 .claude/settings.local.json
 .claude/launch.json
 
+# Runtime results (regenerated per session)
+tasks/*-result.md
+
 # Environment
 .env
 .env.*
-
-# Dependencies
-node_modules/
-
-# Build artifacts
-dist/
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
 
 # OS
 Thumbs.db

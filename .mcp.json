@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "windows-mcp": {
+      "type": "stdio",
+      "command": "C:\\Users\\User\\AppData\\Roaming\\Python\\Python313\\Scripts\\uvx.exe",
+      "args": ["windows-mcp"],
+      "env": {
+        "ANONYMIZED_TELEMETRY": "false"
+      }
+    }
+  }
+}
